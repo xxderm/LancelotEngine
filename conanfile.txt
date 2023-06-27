@@ -1,0 +1,11 @@
+[requires]
+sdl/2.26.1
+opengl/system
+glew/2.2.0
+
+[generators]
+cmake
+
+[options]
+sdl:shared=False
+sdl:sdl2main=True
