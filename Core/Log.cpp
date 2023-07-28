@@ -1,6 +1,11 @@
 #include "Log.hpp"
 
 namespace LL::Core {
+    Log& Log::GetInstance() {
+        static Log instance;
+        return instance;
+    }
+
     std::string Log::GetCurrentTime() {
         auto now = std::chrono::system_clock::now();
         auto cTime = std::chrono::system_clock::to_time_t(now);
@@ -33,7 +38,7 @@ namespace LL::Core {
 
     bool Log::OpenLogFile(const std::string& path) {
         std::lock_guard<std::mutex> lock(mMtx);
-        mFile.open(path, std::ios::app);
+        mFile.open(path, std::ofstream::out | std::ofstream::trunc);
         return mFile.is_open();
     }
 
