@@ -4,12 +4,12 @@ namespace LL::Core {
     std::string Log::GetCurrentTime() {
         auto now = std::chrono::system_clock::now();
         auto cTime = std::chrono::system_clock::to_time_t(now);
-        std::string tStr = std::ctime(&currentTime);
+        std::string tStr = std::ctime(&cTime);
         tStr.pop_back();
         return tStr;
     }
 
-    std::string Log::GetLogLevelStr(const LogLevel &logLevel) {
+    std::string Log::GetLogLevelStr(LogLevel logLevel) {
         std::string levelStr{};
         switch (logLevel) {
             case LogLevel::DEBUG:
@@ -25,23 +25,10 @@ namespace LL::Core {
                 levelStr = "ERROR";
                 break;
             default:
-                levelString = "UNKNOWN";
+                levelStr = "UNKNOWN";
                 break;
         }
-    }
-
-    template<typename... Args>
-    void Log::Write(Args... args, const LogLevel& logLevel) {
-        std::lock_guard<std::mutex> lock(mMtx);
-
-        std::ostringstream oss;
-        oss << '[' << GetCurrentTime() << "] "
-            << '[' << GetLogLevelStr() << "] ";
-        AppendLogStr(oss, args...);
-        if (mFile.is_open()) {
-            mFile << oss.str();
-            mFile.flush();
-        }
+        return levelStr;
     }
 
     bool Log::OpenLogFile(const std::string& path) {
