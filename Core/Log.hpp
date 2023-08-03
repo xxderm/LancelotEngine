@@ -2,15 +2,17 @@
 #include "../impexp.hpp"
 #include "pch.hpp"
 
+#define LL_LOG(logLevel, ...) LL::Core::Log::GetInstance().WriteLog(logLevel, __VA_ARGS__);
+
 namespace LL::Core {
     enum LogLevel {
         DEBUG,
         INFO,
         WARNING,
-        ERROR
+        ERR,
     };
 
-    class LL_CALL Log {
+    class LL_CALL Log final {
     public:
         ~Log() = default;
         Log() = default;

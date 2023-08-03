@@ -26,7 +26,7 @@ namespace LL::Core {
             case LogLevel::WARNING:
                 levelStr = "WARNING";
                 break;
-            case LogLevel::ERROR:
+            case LogLevel::ERR:
                 levelStr = "ERROR";
                 break;
             default:
