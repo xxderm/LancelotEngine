@@ -5,7 +5,7 @@
 #define LL_LOG(logLevel, ...) LL::Core::Log::GetInstance().WriteLog(logLevel, __VA_ARGS__);
 
 namespace LL::Core {
-    enum LogLevel {
+    enum LL_CALL LogLevel {
         DEBUG,
         INFO,
         WARNING,

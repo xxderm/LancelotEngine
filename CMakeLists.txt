@@ -12,3 +12,7 @@ conan_basic_setup()
 add_compile_definitions(SDL_MAIN_HANDLED)
 
 add_subdirectory(Window/)
+
+target_compile_options(Lancelot PRIVATE "/utf-8")
+add_compile_options("$<$<CONFIG:RELEASE>:/utf-8>")
+add_compile_options("$<$<CONFIG:DEBUG>:/utf-8>")

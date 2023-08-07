@@ -4,3 +4,10 @@
 #include <sstream>
 #include <mutex>
 #include <fstream>
+#include <cstdint>
+#include <vector>
+#include <memory>
+#include <unordered_map>
+#include <typeindex>
+#include <map>
+#include <functional>
