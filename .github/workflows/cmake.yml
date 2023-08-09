@@ -19,6 +19,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - uses: lukka/get-cmake@v3.27.1
     - uses: lukka/run-vcpkg@v11.1
 
     - name: Configure CMake
