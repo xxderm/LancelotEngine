@@ -21,7 +21,12 @@ add_compile_definitions(SDL_MAIN_HANDLED)
 # Include project directories
 file(GLOB_RECURSE sources CONFIGURE_DEPENDS "*.cpp")
 
-add_library(LancelotWindow SHARED ${sources})
+add_library(LancelotWindow SHARED ${sources}
+        "../Core/EntityComponentSystem.cpp"
+        "../Core/Log.cpp"
+        "../Core/SessionProfiler.cpp"
+        "../Core/Timer.cpp"
+        )
 
 if (WIN32)
     target_link_libraries(LancelotWindow PRIVATE d3d11.lib)
