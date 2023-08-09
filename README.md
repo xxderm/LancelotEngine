@@ -13,3 +13,10 @@ vcpkg install directxtk:x64-windows
 ```
 3. Set cmake option CMAKE_TOOLCHAIN_FILE to your "vcpkg\scripts\buildsystems\vcpkg.cmake"
 4. Build CMakeLists with MSVC
+
+
+```shell script
+vcpkg install opengl
+vcpkg install glew
+vcpkg install sdl2 --triplet x64-windows
+```

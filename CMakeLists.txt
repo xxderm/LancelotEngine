@@ -4,15 +4,7 @@ project(Lancelot)
 set(DIRECTX_INCLUDE_DIR "C:/Program Files (x86)/Microsoft DirectX SDK (June 2010)/Include")
 set(DIRECTX_LIBRARY_DIR "C:/Program Files (x86)/Microsoft DirectX SDK (June 2010)/Lib/x86")
 
-# Conan deps
-include(conanbuildinfo.cmake)
-conan_basic_setup()
-
 # Compiler flags
 add_compile_definitions(SDL_MAIN_HANDLED)
 
 add_subdirectory(Window/)
-
-target_compile_options(Lancelot PRIVATE "/utf-8")
-add_compile_options("$<$<CONFIG:RELEASE>:/utf-8>")
-add_compile_options("$<$<CONFIG:DEBUG>:/utf-8>")
