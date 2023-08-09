@@ -3,7 +3,7 @@
 namespace LL::Core {
     template<typename T, typename... Args>
     void Entity::AddComponent(Args &&... args) {
-        mComponents.emplace_back(std::make_unique<T>(std::forward<Args>(args)...));
+        mComponents.emplace_back(std::make_shared<T>(std::forward<Args>(args)...));
     }
 
     template<typename T>
@@ -18,7 +18,7 @@ namespace LL::Core {
 
     Entity *EntityManager::CreateEntity() {
         auto entityId = mNextEntityId++;
-        mEntities.emplace_back(std::make_unique<Entity>(entityId));
+        mEntities.emplace_back(std::make_shared<Entity>(entityId));
         return mEntities.back().get();
     }
 
@@ -36,7 +36,7 @@ namespace LL::Core {
             return GetComponent<T>(entity);
         }
         T* component = new T(std::forward<Args>(args)...);
-        mComponents.at(entity).emplace(typeid(T), std::unique_ptr<Component>(component));
+        mComponents.at(entity).emplace(typeid(T), std::shared_ptr<Component>(component));
         return component;
     }
 

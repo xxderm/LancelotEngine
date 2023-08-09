@@ -24,7 +24,7 @@ namespace LL::Core {
         T* GetComponent() const;
     private:
         uint32_t mId{};
-        std::vector<std::unique_ptr<Component>> mComponents;
+        std::vector<std::shared_ptr<Component>> mComponents;
     };
 
     class LL_CALL EntityManager final {
@@ -36,7 +36,7 @@ namespace LL::Core {
         std::vector<Entity*> GetEntitiesWithComponent() const;
     private:
         uint32_t mNextEntityId{};
-        std::vector<std::unique_ptr<Entity>> mEntities;
+        std::vector<std::shared_ptr<Entity>> mEntities;
     };
 
     class LL_CALL ComponentManager final {
@@ -50,7 +50,7 @@ namespace LL::Core {
         template<typename T>
         bool HasComponent(Entity* entity) const;
     private:
-        std::unordered_map<Entity*, std::unordered_map<std::type_index, std::unique_ptr<Component>>> mComponents;
+        std::unordered_map<Entity*, std::unordered_map<std::type_index, std::shared_ptr<Component>>> mComponents;
     };
 
     class LL_CALL SystemManager final {
