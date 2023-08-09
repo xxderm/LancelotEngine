@@ -9,7 +9,6 @@ __pycache__/
 *.so
 
 # LL
-Window/
 tests/
 
 # Distribution / packaging
