@@ -19,14 +19,14 @@ jobs:
 
     steps:
     - uses: lukka/get-cmake@latest
+    
     - name: Setup vcpkg (it does not install any package yet)
       uses: lukka/run-vcpkg@v11
       with:
-          vcpkgDirectory: "LancelotEngine/vcpkg"
-          vcpkgJsonGlob: '${{ github.workspace }}/vcpkg.json'
-          runVcpkgInstall: true
-    - uses: actions/checkout@v3   
-    
+          vcpkgDirectory: '${{ github.workspace }}/vcpkg'
+          vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
+          runVcpkgInstall: true          
+   
     - name: Build Project
       run: |
         cmake -B build -DCMAKE_TOOLCHAIN_FILE='.vcpkg/scripts/buildsystems/vcpkg.cmake'
