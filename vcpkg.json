@@ -1,9 +1,9 @@
 {
     "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
     "dependencies": [      
-      "directxtk:x64-windows",
-	  "opengl",
-	  "sdl2:x64-windows",
-	  "glew"
+      "directxtk",
+	    "opengl",
+	    "sdl2",
+	    "glew"
     ]
   }
