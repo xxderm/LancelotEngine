@@ -28,4 +28,4 @@ jobs:
           ./vcpkg integrate install
           
       - name: Install vcpkg dependencies
-        run: vcpkg install --feature-flags=manifests
+        run: vcpkg install --feature-flags=manifests --allow-unsupported
