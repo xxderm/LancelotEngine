@@ -20,7 +20,7 @@ jobs:
       - name: Setup vcpkg (it does not install any package yet)
         uses: lukka/run-vcpkg@v11
         with:
-            vcpkgDirectory: '../../vcpkg'
+            vcpkgDirectory: '../vcpkg'
             runVcpkgInstall: true          
             vcpkgJsonGlob: '../../**/vcpkg.json'
 
