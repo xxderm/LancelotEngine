@@ -14,12 +14,15 @@ jobs:
   build:
     runs-on: windows-latest
 
-    steps:
-      - name: Cache
-        uses: actions/cache@v1.2.1
-        
+    steps:        
       - name: Checkout repository
         uses: actions/checkout@v3
+      
+      - name: Cache
+        uses: actions/cache@v1.2.1
+        with:
+          path: prime-numbers
+          key: ${{ runner.os }}-primes
         
       - name: Update submodules
         run: git submodule update --init --recursive  
