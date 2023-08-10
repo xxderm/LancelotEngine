@@ -29,3 +29,10 @@ jobs:
           
       - name: Install vcpkg dependencies
         run: vcpkg install --feature-flags=manifests --allow-unsupported
+
+      - name: Build project
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
+          cmake --build .
