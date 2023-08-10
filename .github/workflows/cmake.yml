@@ -23,7 +23,7 @@ jobs:
         with:
             runVcpkgInstall: true         
             vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
-            vcpkgJsonGlob: '../vcpkg.json'
+            vcpkgJsonGlob: '**/vcpkg.json'
 
       - name: Build Project
         run: |
