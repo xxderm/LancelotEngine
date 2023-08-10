@@ -15,18 +15,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v3
       - uses: lukka/get-cmake@latest
 
       - name: Setup vcpkg (it does not install any package yet)
         uses: lukka/run-vcpkg@v11
         with:
-            vcpkgDirectory: '${{ github.workspace }}/../'
+            vcpkgDirectory: '${{ github.workspace }}/../vcpkg/'
             runVcpkgInstall: true          
             vcpkgJsonGlob: '../../**/vcpkg.json'
 
       - name: Build Project
         run: |
-          cmake -B build -DCMAKE_TOOLCHAIN_FILE='vcpkg/scripts/buildsystems/vcpkg.cmake'
+          cmake -B build "-DCMAKE_TOOLCHAIN_FILE='vcpkg/scripts/buildsystems/vcpkg.cmake'"
           cmake --build build
 
 
