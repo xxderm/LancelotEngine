@@ -17,10 +17,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: lukka/get-cmake@latest
+      
+      - name: Show ls
+        run: ls ${{ github.workspace }}
 
       - name: Setup vcpkg (it does not install any package yet)
         uses: lukka/run-vcpkg@v11
         with:
+            vcpkgDirectory: '${{ github.workspace }}/vcpkg'
             runVcpkgInstall: true         
             vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
             vcpkgJsonGlob: '**/vcpkg.json'
