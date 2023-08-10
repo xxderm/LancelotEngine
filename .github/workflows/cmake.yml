@@ -15,7 +15,7 @@ jobs:
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
     # You can convert this to a matrix build if you need cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: lukka/get-cmake@latest
@@ -23,9 +23,9 @@ jobs:
     - name: Setup vcpkg (it does not install any package yet)
       uses: lukka/run-vcpkg@v11
       with:
-          vcpkgDirectory: '${{ github.workspace }}/vcpkg/'
-          vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
+          vcpkgDirectory: '${{ github.workspace }}/vcpkg'
           runVcpkgInstall: true          
+          vcpkgJsonGlob: '**/vcpkg.json'
    
     - name: Build Project
       run: |
