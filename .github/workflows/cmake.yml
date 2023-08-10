@@ -22,13 +22,13 @@ jobs:
       uses: lukka/run-vcpkg@v11
       with:
           vcpkgDirectory: '${{ github.workspace }}/vcpkg'
-          vcpkgJsonGlob: '.\LancelotEngine\vcpkg.json'
+          vcpkgJsonGlob: './vcpkg.json'
           runVcpkgInstall: true
     - uses: actions/checkout@v3   
     
     - name: Build Project
       run: |
-        cmake -B build -DCMAKE_TOOLCHAIN_FILE='.\LancelotEngine\vcpkg\scripts\buildsystems\vcpkg.cmake'
+        cmake -B build -DCMAKE_TOOLCHAIN_FILE='.vcpkg/scripts/buildsystems/vcpkg.cmake'
         cmake --build build
         
 
