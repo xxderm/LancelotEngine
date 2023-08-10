@@ -24,7 +24,7 @@ jobs:
       - name: Install vcpkg
         run: |
           cd vcpkg
-          ./bootstrap-vcpkg.sh
+          ./bootstrap-vcpkg.bat
           ./vcpkg integrate install
           
       - name: Install vcpkg dependencies
