@@ -23,7 +23,7 @@ jobs:
     
     - name: Build Project
       run: |
-        cmake -B build
+        cmake -B build -DCMAKE_TOOLCHAIN_FILE=".\LancelotEngine\vcpkg\scripts\buildsystems\vcpkg.cmake"
         cmake --build build
         
 
