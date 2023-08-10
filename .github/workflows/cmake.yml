@@ -26,7 +26,7 @@ jobs:
         with:
             vcpkgDirectory: '${{ github.workspace }}/vcpkg'
             vcpkgJsonGlob: '**/vcpkg.json'
-            shell: bash            
+            useShell: bash            
 
       - name: Build Project
         run: |
