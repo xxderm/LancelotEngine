@@ -1,5 +1,5 @@
 ## LancelotEngine
-
+[![CMake](https://github.com/xxderm/LancelotEngine/actions/workflows/cmake.yml/badge.svg)](https://github.com/xxderm/LancelotEngine/actions/workflows/cmake.yml)
 ### Build
 
 #### Install dependencies
