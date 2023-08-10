@@ -18,11 +18,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: lukka/get-cmake@latest
     - name: Setup vcpkg (it does not install any package yet)
       uses: lukka/run-vcpkg@v11
       with:
           vcpkgDirectory: '${{ github.workspace }}/vcpkg'
-          vcpkgJsonGlob: './vcpkg.json'
+          vcpkgJsonGlob: 'vcpkg.json'
           runVcpkgInstall: true
     - uses: actions/checkout@v3   
     
