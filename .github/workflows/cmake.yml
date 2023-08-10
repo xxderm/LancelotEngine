@@ -24,6 +24,7 @@ jobs:
       - name: Setup vcpkg (it does not install any package yet)
         uses: lukka/run-vcpkg@v11.1
         with:
+            working-directory: '${{ github.workspace }}'
             vcpkgDirectory: '${{ github.workspace }}/vcpkg'
             vcpkgJsonGlob: '**/vcpkg.json'
 
