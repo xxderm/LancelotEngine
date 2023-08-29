@@ -1,7 +1,6 @@
 #pragma once
 #include "WindowSDL.hpp"
 #include <D3D11.h>
-#include <D3DX11.h>
 
 namespace LL::Window {
     class LL_CALL SDLWindowDirectX final : public WindowSDL {
