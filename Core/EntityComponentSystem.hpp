@@ -5,14 +5,14 @@
 namespace LL::Core {
     class LL_CALL System {
     public:
-        virtual ~System() = 0;
+        virtual ~System() = default;
         // TODO: Switch float to Timespan
         virtual void Update(float dt) = 0;
     };
 
     class LL_CALL Component {
     public:
-        virtual ~Component() = 0;
+        virtual ~Component() = default;
     };
 
     class LL_CALL Entity final {
