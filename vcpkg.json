@@ -4,6 +4,7 @@
       "directxtk",
 	    "opengl",
 	    "sdl2",
-	    "glew"
+	    "glew",
+      "glm"
     ]
   }
