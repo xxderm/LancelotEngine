@@ -11,6 +11,9 @@ __pycache__/
 # LL
 tests/
 
+# vcpkg
+vcpkg_installed/
+
 # Distribution / packaging
 .Python
 build/
