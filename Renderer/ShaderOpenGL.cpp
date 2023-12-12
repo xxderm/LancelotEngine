@@ -76,44 +76,76 @@ namespace LL::Renderer {
         }
     }
 
-    void ShaderProgramGL::LinkShader(GLuint linkId, const char* code) {
-        glShaderSource(linkId, 1, &code, NULL);
-        glCompileShader(linkId);
+    ShaderProgramGL::ShaderProgramGL() {
+        this->mId = glCreateProgram();
+    }
+
+    ShaderProgramGL::~ShaderProgramGL() {
+        glDeleteProgram(this->mId);
+    }
+
+    void ShaderProgramGL::Compile() {
+        LL_PROFILE
+        LL_LOG(Core::INFO, "Shader compile process");
+        for (auto& shader : mShaders) {
+            auto &body = shader.second;
+            const char* sCode = body.Source.c_str();
+            switch (shader.first) {
+                case ShaderType::LL_VERT: {
+                    body.Id = glCreateShader(GL_VERTEX_SHADER);
+                    break;
+                }
+                case LL_FRAG: {
+                    body.Id = glCreateShader(GL_FRAGMENT_SHADER);
+                    break;
+                }
+                case LL_TESS_CONT: {
+                    body.Id = glCreateShader(GL_TESS_CONTROL_SHADER);
+                    break;
+                }
+                case LL_TESS_EVAL: {
+                    body.Id = glCreateShader(GL_TESS_EVALUATION_SHADER);
+                    break;
+                }
+                case LL_GEOMETRY: {
+                    body.Id = glCreateShader(GL_GEOMETRY_SHADER);
+                    break;
+                }
+            }
+            glShaderSource(body.Id, 1, &sCode, NULL);
+            glCompileShader(body.Id);
+            this->CompileErrors();
+        }
+
+        for (auto& shader : mShaders) {
+            auto& body = shader.second;
+            glAttachShader(this->mId, body.Id);
+        }
+
+        glLinkProgram(this->mId);
         this->CompileErrors();
-        mId = glCreateProgram();
-        glAttachShader(mId, linkId);
-        glLinkProgram(mId);
-        this->CompileErrors();
-        glDeleteShader(linkId);
+
+        for (auto& shader : mShaders) {
+            auto& body = shader.second;
+            glDeleteShader(body.Id);
+        }
     }
 
-    void VertexProgramGL::Compile(std::string shaderText) {
-        mVertexId = glCreateShader(GL_VERTEX_SHADER);
-        const char* shaderCode = shaderText.c_str();
-        this->LinkShader(mVertexId, shaderCode);
+    void ShaderProgramGL::Set(const ShaderType &type, const std::string &src) {
+        LL_PROFILE
+        if (mShaders.count(type) > 0) {
+            LL_LOG(Core::INFO, "Update shader with code: ", (int)type);
+            auto& sBody = mShaders.at(type);
+            sBody.Source = src;
+            return;
+        }
+        LL_LOG(Core::INFO, "Shader add with code: ", (int)type);
+        ShaderBody shaderBody;
+        shaderBody.Source = src;
+        mShaders.insert({ type, shaderBody });
     }
 
-    void FragmentProgramGL::Compile(std::string shaderText) {
-        mFragmentId = glCreateShader(GL_FRAGMENT_SHADER);
-        const char* shaderCode = shaderText.c_str();
-        this->LinkShader(mFragmentId, shaderCode);
-    }
+    void ShaderBuilderGL::ProcessVertex() noexcept {
 
-    void TessControlProgramGL::Compile(std::string shaderText) {
-        mTessControlId = glCreateShader(GL_TESS_CONTROL_SHADER);
-        const char* shaderCode = shaderText.c_str();
-        this->LinkShader(mTessControlId, shaderCode);
-    }
-
-    void TessEvalProgramGL::Compile(std::string shaderText) {
-        mTessEvalId = glCreateShader(GL_TESS_EVALUATION_SHADER);
-        const char* shaderCode = shaderText.c_str();
-        this->LinkShader(mTessEvalId, shaderCode);
-    }
-
-    void GeometryProgramGL::Compile(std::string shaderText) {
-        mGeomId = glCreateShader(GL_GEOMETRY_SHADER);
-        const char* shaderCode = shaderText.c_str();
-        this->LinkShader(mGeomId, shaderCode);
     }
 }

@@ -2,8 +2,12 @@
 #include "renderer_gl_pch.hpp"
 
 namespace LL::Renderer {
+    class LL_CALL VertexArrayObjectGL;
+
     class LL_CALL VertexBufferGL final {
     public:
+        // TODO:
+        // Add overload vertices (void*, float, vec2, vec4)
         void AddBuffer(
                 const std::string& name,
                 const std::vector<glm::vec3>& vertices);
@@ -13,6 +17,7 @@ namespace LL::Renderer {
     private:
         void CreateBuffer(const std::string& name, GLuint size);
     private:
+        friend class VertexArrayObjectGL;
         struct VertexBufferObject final {
             GLuint Id{};
             GLuint Size{};
@@ -25,6 +30,7 @@ namespace LL::Renderer {
         void SetIndices(const std::vector<GLuint>& indices);
         ~IndexBufferGL();
     private:
+        friend class VertexArrayObjectGL;
         GLuint mCount{};
         GLuint mId{};
     };
@@ -55,6 +61,8 @@ namespace LL::Renderer {
         ~VertexArrayObjectGL();
     private:
         GLuint mId{};
+        std::shared_ptr<VertexBufferGL> mBuffers;
+        std::shared_ptr<IndexBufferGL> mIndices;
     };
 
 }

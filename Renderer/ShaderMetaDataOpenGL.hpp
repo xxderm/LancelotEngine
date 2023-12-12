@@ -1,16 +1,38 @@
 #pragma once
 #include <string>
+#include "../impexp.hpp"
 
 namespace LL::Renderer {
+    constexpr char* GLSL_VERSION = (char*)"#version 400 core\n";
 
-    std::string SHADER_GLSL_TEMPLATE =
-            "[VERSION]\n"
-            "[LAYOUTS]\n"
-            "[UNIFORMS]\n"
-            "[INPUTS]\n"
-            "[OUTPUTS]\n"
-            "[FUNCTIONS]\n"
-            "[ENTRY]\n";
+    constexpr char* SHADER_TEMPLATE_GLSL = (char*)
+            "[VERSION]"
+            "[LAYOUT]"
+            "[UNIFORM]"
+            "[INPUT]"
+            "[OUTPUT]"
+            "[FUNCTION]"
+            "[ENTRY]";
+
+    constexpr char* SHADER_SECTIONS_GLSL[] = {
+            (char*)"[VERSION]",
+            (char*)"[LAYOUT]",
+            (char*)"[UNIFORM]",
+            (char*)"[INPUT]",
+            (char*)"[OUTPUT]",
+            (char*)"[FUNCTION]",
+            (char*)"[ENTRY]"
+    };
+
+    enum LL_CALL ShaderSectionGLSL : int {
+        LL_VERSION = 0,
+        LL_LAYOUT,
+        LL_UNIFORM,
+        LL_INPUT,
+        LL_OUTPUT,
+        LL_FUNCTION,
+        LL_ENTRY
+    };
 
     class LL_CALL ShaderFunctionsStoreGL {
     public:
@@ -68,26 +90,34 @@ namespace LL::Renderer {
         LL_SAMPLER2D,
     };
 
-    std::string SHADER_TYPE_STORE[] = {
+    static const std::string SHADER_TYPE_STORE[] = {
             "float", "int",
             "vec2", "vec3", "vec4",
             "mat3", "mat4",
             "sampler2D"
     };
 
+    static inline const std::string GetSection(ShaderSectionGLSL section) noexcept {
+        return SHADER_SECTIONS_GLSL[section];
+    }
+
     static inline const std::string GetTypeGLSL(ShaderTypesGLSL type) noexcept {
         return SHADER_TYPE_STORE[type];
     }
 
-    static inline const std::string UniformGLSL(ShaderTypesGLSL type) noexcept {
-        return "uniform " + SHADER_TYPE_STORE[type];
+    static inline const std::string UniformGLSL(const std::string& name, ShaderTypesGLSL type) noexcept {
+        return "uniform " + GetTypeGLSL(type) + " " + name + ";\n";
     }
 
-    static inline const std::string InGLSL(ShaderTypesGLSL type) noexcept {
-        return "in " + SHADER_TYPE_STORE[type];
+    static inline const std::string InGLSL(const std::string& name, ShaderTypesGLSL type) noexcept {
+        return "in " + GetTypeGLSL(type) + " " + name + ";\n";
     }
 
-    static inline const std::string OutGLSL(ShaderTypesGLSL type) noexcept {
-        return "out " + SHADER_TYPE_STORE[type];
+    static inline const std::string OutGLSL(const std::string& name, ShaderTypesGLSL type) noexcept {
+        return "out " + GetTypeGLSL(type) + " " + name + ";\n";
+    }
+
+    static inline const std::string GetLayoutString(const std::string& name, ShaderTypesGLSL type, unsigned locNum = 0) noexcept {
+        return "layout (location = " + std::to_string(locNum) + ") in " + GetTypeGLSL(type) + " " + name + ";\n";
     }
 }

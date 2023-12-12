@@ -29,6 +29,7 @@ add_library(LancelotRenderer SHARED ${sources}
         "../Core/Log.cpp"
         "../Core/SessionProfiler.cpp"
         "../Core/Timer.cpp"
+        "../Core/Resources.cpp"
         )
 
 if (WIN32)

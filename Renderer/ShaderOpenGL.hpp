@@ -3,10 +3,21 @@
 #include "renderer_gl_pch.hpp"
 
 namespace LL::Renderer {
+    enum LL_CALL ShaderType : int {
+        LL_VERT = 0, LL_FRAG,
+        LL_TESS_CONT, LL_TESS_EVAL,
+        LL_GEOMETRY
+    };
+
+    struct LL_CALL ShaderBody final {
+        GLuint Id{};
+        std::string Source{};
+    };
+
     class LL_CALL ShaderProgramGL {
     public:
-        ShaderProgramGL() = default;
-        virtual void Compile(std::string shaderText) = 0;
+        ShaderProgramGL();
+        void Compile();
         void SetBool(const std::string& name, bool value) const;
         void SetInt(const std::string& name, int value) const;
         void SetFloat(const std::string& name, float value) const;
@@ -20,89 +31,50 @@ namespace LL::Renderer {
         void SetMat3(const std::string& name, const glm::mat3& mat) const;
         void SetMat4(const std::string& name, const glm::mat4& mat) const;
         void Bind();
+        void Set(const ShaderType& type, const std::string& src);
         void Release();
-        virtual ~ShaderProgramGL() = default;
-    protected:
+        ~ShaderProgramGL();
+    private:
         void CompileErrors();
-        void LinkShader(GLuint linkId, const char* code);
-    protected:
+    private:
         GLuint mId{};
+        std::unordered_map<ShaderType, ShaderBody> mShaders{};
     };
 
-    class LL_CALL VertexProgramGL final : public ShaderProgramGL {
+    class LL_CALL ShaderBuilderGL {
+    protected:
+        virtual void ProcessVertex() noexcept;
+        virtual void ProcessFragment() noexcept;
+        virtual void ProcessTessControl() noexcept;
+        virtual void ProcessTessEval() noexcept;
+        virtual void ProcessGeometry() noexcept;
     public:
-        void Compile(std::string shaderText) override;
-    private:
-        GLuint mVertexId{};
-    };
-
-    class LL_CALL FragmentProgramGL final : public ShaderProgramGL {
-    public:
-        void Compile(std::string shaderText) override;
-    private:
-        GLuint mFragmentId{};
-    };
-
-    class LL_CALL TessControlProgramGL final : public ShaderProgramGL {
-    public:
-        void Compile(std::string shaderText) override;
-    private:
-        GLuint mTessControlId{};
-    };
-
-    class LL_CALL TessEvalProgramGL final : public ShaderProgramGL {
-    public:
-        void Compile(std::string shaderText) override;
-    private:
-        GLuint mTessEvalId{};
-    };
-
-    class LL_CALL GeometryProgramGL final : public ShaderProgramGL {
-    public:
-        void Compile(std::string shaderText) override;
-    private:
-        GLuint mGeomId{};
-    };
-
-    class LL_CALL ShaderGL final {
-    public:
-        void Bind() noexcept;
-        void Release() noexcept;
-
-    // bind/release
-    // set uniform values
-    // set layouts
-    // mb UBO?
-    // mb TBO?
-    };
-
-    class LL_CALL ShaderPipelineGL final {
-    public:
-        ShaderPipelineGL() = default;
-        bool Compile() const noexcept;
-        std::shared_ptr<ShaderGL> GetVertex() const noexcept;
-        std::shared_ptr<ShaderGL> GetFragment() const noexcept;
-        std::shared_ptr<ShaderGL> GetTessControl() const noexcept;      // return mShadersGL[] or nullptr
-        std::shared_ptr<ShaderGL> GetTessEval() const noexcept;
-        ~ShaderPipelineGL();
-    private:
-        // Vertex => ShaderTextSrc, Fragment => ShaderTextSrc
-        std::map<std::string, std::string> mShadersGL;
-    };
-
-    class LL_CALL ShaderBuilderGL final {
-    public:
-        // Каждая функция должна принимать необходимые для хранимой функции параметры
+        void SectionFunctions() {
+            // Example:
+            //  string section = "[text]";
+            //  string textBody =
+            //        "layout (location=0) in vec3 pos;\n"
+            //        "layout (location=0) in vec3 norm;\n";
+            //  string shaderContent =
+            //        "\n[version]\n"
+            //        "\n[text]\n"
+            //        "\n[entry]\n";
+            //  auto begIndex = shaderContent.find(section);
+            //  shaderContent.replace(begIndex, section.size(), textBody);
+        }
+        // Каждая функция должна принимать необходимые для хранимой функции параметры, кроме стандартных
+        // (position, normal, tangent, bitangent, ... )
         void SetBlinnPhong();
         void SetCascadeShadows();
         void SetUpTessellation();
         void SetUpGeometry();
-        std::shared_ptr<ShaderPipelineGL> Build() const noexcept;
+        std::shared_ptr<ShaderProgramGL> Build() const noexcept;
+        // section name -> section code
+        std::map<std::string, std::string> mSectionCode;
         // TODO:
         // Добавить std::map для отслеживания подключения функций.
         // К примеру, есть несколь видов фукнций тени, можно использовать только одну
         // Хранить к примеру так key => <Shadows> value => true
         // Если будет true, то перезаписать на новую функцию, и убрать старую
-
     };
 }
