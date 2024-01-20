@@ -1,8 +1,17 @@
 ## LancelotEngine
 [![CMake](https://github.com/xxderm/LancelotEngine/actions/workflows/cmake.yml/badge.svg)](https://github.com/xxderm/LancelotEngine/actions/workflows/cmake.yml)
 ### Build
-
-#### Install dependencies
+#### Update submodule
+```shell script
+git submodule init
+git submodule update
+```
+#### Vcpkg build
+````shell script
+vcpkg\bootstrap-vcpkg.bat
+vcpkg install --triplet x64-windows
+````
+##### Single installation dependencies
 ```shell script
 vcpkg install directxtk
 vcpkg install directxtk:x64-windows
