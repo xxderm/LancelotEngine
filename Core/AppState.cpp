@@ -33,6 +33,10 @@ namespace LL::Core {
         }
     }
 
+    void AppState::OnRender() {
+        mAppStates.back()->OnRender(this->weak_from_this().lock());
+    }
+
     void AppStateControl::ChangeState(AppStatePtr state, const AppStateControlPtr &control) {
         state->ChangeState(control);
     }

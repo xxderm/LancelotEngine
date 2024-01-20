@@ -7,7 +7,7 @@ namespace LL::Window {
             LL_LOG(Core::LogLevel::ERR, "SDL Initialize error: ", SDL_GetError());
             return false;
         }
-        mWindow = SDL_CreateWindow(properties.Title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        mWindow = SDL_CreateWindow(properties.Title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                     properties.Width, properties.Height, mFlags);
         if (mWindow == nullptr) {
             LL_LOG(Core::LogLevel::ERR, "SDL Initialize error: ", SDL_GetError());
@@ -33,5 +33,13 @@ namespace LL::Window {
         LL_LOG(Core::LogLevel::INFO, "[Hz] ", mDisplayMode.refresh_rate);
         LL_LOG(Core::LogLevel::INFO, "[CPU count] ", SDL_GetCPUCount());
         LL_LOG(Core::LogLevel::INFO, "[CPU cache] ", SDL_GetCPUCacheLineSize());
+    }
+
+    void WindowSDL::StartState(std::shared_ptr<Core::AppStateControl> startState) {
+        mStates->ChangeState(startState);
+    }
+
+    WindowSDL::WindowSDL() {
+        mStates = std::make_shared<Core::AppState>();
     }
 }

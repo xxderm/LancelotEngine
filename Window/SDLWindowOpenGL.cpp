@@ -30,10 +30,14 @@ namespace LL::Window {
     }
 
     void SDLWindowOpenGL::Swap() {
+        mStates->OnRender();
         SDL_GL_SwapWindow(mWindow);
+        LL_LOG(LL::Core::LogLevel::ERR, "Убрать хуйню SDLWindowOpenGLm");
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 
     void SDLWindowOpenGL::Clear() {
+        PrepareToUpdateControls();
         glClearColor(0.f, 0.f, 0.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
@@ -52,5 +56,13 @@ namespace LL::Window {
             mWindow = nullptr;
         }
         SDL_Quit();
+    }
+
+    void SDLWindowOpenGL::PrepareToUpdateControls() {
+        while (SDL_PollEvent(&mEvent) != 0) {
+            if (mEvent.type == SDL_QUIT) {
+            }
+        }
+        mStates->OnUpdate();
     }
 }

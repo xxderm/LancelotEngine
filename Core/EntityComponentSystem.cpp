@@ -87,7 +87,8 @@ namespace LL::Core {
             return GetSystem<T>();
         }
         T* system = new T(std::forward<Args>(args)...);
-        mSystems[&typeid(T)] = std::unique_ptr<System>(system);
+        //mSystems[&typeid(T)] = std::unique_ptr<System>(system);
+        mSystems[&typeid(T)] = std::make_unique<System>(system);
         return system;
     }
 
@@ -100,7 +101,8 @@ namespace LL::Core {
     T *SystemManager::GetSystem() const {
         auto it = mSystems.find(&typeid(T));
         if (it != mSystems.end()) {
-            return dynamic_cast<T*>(it->second.get());
+            //return dynamic_cast<T*>(it->second.get());
+            return dynamic_cast<T*>(it->second);
         }
         return nullptr;
     }

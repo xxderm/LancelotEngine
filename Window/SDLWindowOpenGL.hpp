@@ -12,6 +12,8 @@ namespace LL::Window {
         bool Initialize(WindowProperties properties) override;
         void Clear() override;
         void Swap() override;
+    protected:
+        virtual void PrepareToUpdateControls();
     private:
         SDL_GLContext mContext = nullptr;
     };

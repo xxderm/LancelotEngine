@@ -5,6 +5,7 @@
 	    "opengl",
 	    "sdl2",
 	    "glew",
-      "glm"
+      "glm",
+      "freetype"
     ]
   }

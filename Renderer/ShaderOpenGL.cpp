@@ -148,4 +148,20 @@ namespace LL::Renderer {
     void ShaderBuilderGL::ProcessVertex() noexcept {
 
     }
+
+    void ShaderBuilderGL::ProcessFragment() noexcept {
+
+    }
+
+    void ShaderBuilderGL::ProcessTessControl() noexcept {
+
+    }
+
+    void ShaderBuilderGL::ProcessTessEval() noexcept {
+
+    }
+
+    void ShaderBuilderGL::ProcessGeometry() noexcept {
+
+    }
 }
