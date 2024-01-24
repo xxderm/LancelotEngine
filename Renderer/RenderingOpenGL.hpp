@@ -1,6 +1,7 @@
 #pragma once
 #include "BuffersOpenGL.hpp"
 #include "ShaderOpenGL.hpp"
+#include "../Core/EntityComponentSystem.hpp"
 
 namespace LL::Renderer {
     struct Object3DGL final : public Core::Component {

@@ -9,6 +9,6 @@ namespace LL::Renderer {
     public:
         void Create(unsigned char* data, unsigned int width, unsigned int height) override;
         void Destroy() override;
-        ~TextureGL();
+        ~TextureGL() override;
     };
 }

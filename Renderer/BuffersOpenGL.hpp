@@ -1,5 +1,6 @@
 #pragma once
 #include "renderer_gl_pch.hpp"
+#include "../Core/pch.hpp"
 
 namespace LL::Renderer {
     class LL_CALL VertexArrayObjectGL;

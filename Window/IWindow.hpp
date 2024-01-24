@@ -1,7 +1,6 @@
 #pragma once
-#include "../impexp.hpp"
 #include "../Core/Log.hpp"
-#include "Core/core_pch.hpp"
+#include "AppState.hpp"
 
 namespace LL::Window {
     struct LL_CALL WindowProperties {

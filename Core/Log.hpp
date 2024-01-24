@@ -1,5 +1,4 @@
 #pragma once
-#include "../impexp.hpp"
 #include "pch.hpp"
 
 #define LL_LOG(logLevel, ...) LL::Core::Log::GetInstance().WriteLog(logLevel, __VA_ARGS__);

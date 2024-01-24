@@ -1,7 +1,6 @@
 #pragma once
 #include "renderer_gl_pch.hpp"
-#include <freetype/freetype.h>
-#include FT_FREETYPE_H
+#include "../Core/pch.hpp"
 
 namespace LL::Renderer {
     // TODO: make multiple fonts
