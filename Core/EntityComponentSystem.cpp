@@ -88,7 +88,8 @@ namespace LL::Core {
         }
         T* system = new T(std::forward<Args>(args)...);
         //mSystems[&typeid(T)] = std::unique_ptr<System>(system);
-        mSystems[&typeid(T)] = std::make_unique<System>(system);
+        // TODO: fix
+        mSystems[&typeid(T)] = system;
         return system;
     }
 
