@@ -62,12 +62,10 @@ namespace LL::Renderer {
                     "uniform vec3 textColor;\n"
                     "void main()\n"
                     "{\n"
-                       "float glyphShape = texture(glyphTexture, TexCoords).r;\n"
-                       "if (glyphShape < 0.44)\n"
-                            "discard;\n"
-                       "vec3 outColor = textColor;"
-                       "if (glyphShape < 0.5) outColor = vec3(1, 0.9, 1);"
-                       "fragColor = vec4(outColor, 1.0);\n"
+                    "    float sdfValue = texture(glyphTexture, TexCoords).r;\n"
+                    "    float alpha = smoothstep(0.455, 0.475, sdfValue);\n"
+                    "\n"
+                    "    fragColor = vec4(textColor, alpha);\n"
                     "}";
         }
 
