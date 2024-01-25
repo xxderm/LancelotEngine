@@ -25,12 +25,23 @@ namespace LL::Window {
             return false;
         }
         SDL_GL_SetSwapInterval(properties.Vsync);
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO();
+        (void)io;
+        ImGui_ImplSDL2_InitForOpenGL(mWindow, mContext);
+        ImGui_ImplOpenGL3_Init("#version 330");
         LL_LOG(Core::INFO, "SDLWindowOpenGL initialization success");
         return true;
     }
 
     void SDLWindowOpenGL::Swap() {
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplSDL2_NewFrame(mWindow);
+        ImGui::NewFrame();
         mStates->OnRender();
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         SDL_GL_SwapWindow(mWindow);
     }
 
@@ -58,6 +69,7 @@ namespace LL::Window {
 
     void SDLWindowOpenGL::PrepareToUpdateControls() {
         while (SDL_PollEvent(&mEvent) != 0) {
+            ImGui_ImplSDL2_ProcessEvent(&mEvent);
             if (mEvent.type == SDL_QUIT) {
             }
         }

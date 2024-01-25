@@ -5,6 +5,8 @@
 #include "ShaderMetaDataOpenGL.hpp"
 #include "../Core/Log.hpp"
 #include <iostream>
+#include "imgui.h"
+#include "imgui_impl_sdl2.h"
 namespace LL::Renderer {
     class Shader
     {
@@ -84,6 +86,15 @@ namespace LL::Renderer {
         bool AddFont(std::string path);
         void RenderText(std::string text, float x, float y, float scale, glm::vec3 color)
         {
+            static float minVal = 0;
+            static float maxVal = 0;
+            static float smooth = 0;
+            ImGui::Begin("Test");
+            ImGui::SliderFloat("FloatMin", &minVal, 0., 1., "%.5f");
+            ImGui::SliderFloat("FloatMax", &maxVal, 0., 1., "%.5f");
+            ImGui::SliderFloat("Smooth", &smooth, 0., 1., "%.5f");
+            ImGui::End();
+
             // activate corresponding render state
             s.use();
             glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
@@ -93,6 +104,9 @@ namespace LL::Renderer {
             glActiveTexture(GL_TEXTURE0);
             glBindVertexArray(VAO);
             s.setInt("glyphTexture", 0);
+            s.setFloat("minVal", minVal);
+            s.setFloat("maxVal", maxVal);
+            s.setFloat("smoothing", smooth);
 
             // iterate through all characters
             std::string::const_iterator c;
