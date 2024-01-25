@@ -1,6 +1,10 @@
 #pragma once
 #include <GL/glew.h>
 #include <GL/GL.h>
-#include <glm.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/vec3.hpp>
+#include <glm/matrix.hpp>
+#include <glm/mat4x4.hpp>
 #include <freetype/freetype.h>
 #include FT_FREETYPE_H

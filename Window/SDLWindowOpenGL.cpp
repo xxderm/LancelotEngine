@@ -32,8 +32,6 @@ namespace LL::Window {
     void SDLWindowOpenGL::Swap() {
         mStates->OnRender();
         SDL_GL_SwapWindow(mWindow);
-        LL_LOG(LL::Core::LogLevel::ERR, "Убрать хуйню SDLWindowOpenGLm");
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 
     void SDLWindowOpenGL::Clear() {

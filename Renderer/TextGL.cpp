@@ -28,17 +28,34 @@ namespace LL::Renderer {
             unsigned char* buffer = slot->bitmap.buffer;
 
             // Create texture
-
+            auto glyphTexture = std::make_shared<TextureGL>();
+            glyphTexture->Create(buffer, width, height);
             //
             
             Glyph glyph = {
-                0,
+                glyphTexture,
                 glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
                 glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
                 (uint32_t)face->glyph->advance.x
             };
             mGlyps.insert(std::pair<uint32_t, Glyph>(i, glyph));
         }
+        FT_Done_Face(face);
+        FT_Done_FreeType(ft);
+
+        glGenVertexArrays(1, &VAO);
+        glGenBuffers(1, &VBO);
+        glBindVertexArray(VAO);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        s.cr();
         return true;
     }
 }

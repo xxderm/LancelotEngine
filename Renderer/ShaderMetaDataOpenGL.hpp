@@ -33,9 +33,45 @@ namespace LL::Renderer {
         LL_ENTRY
     };
 
-    class LL_CALL ShaderFunctionsStoreGL {
+    class LL_CALL ShaderStorageGL {
     public:
-        virtual std::string BlinnPhong() noexcept {
+        ShaderStorageGL() = default;
+
+        static ShaderStorageGL& GetInstance() {
+            static ShaderStorageGL instance;
+            return instance;
+        }
+
+        virtual std::string FontSDFVertex() noexcept {
+            return std::string(GLSL_VERSION) +
+                   "layout (location = 0) in vec4 vertex;\n"
+                   "out vec2 TexCoords;\n"
+                   "uniform mat4 projection;\n"
+                   "void main()\n"
+                   "{\n"
+                   "    gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);\n"
+                   "    TexCoords = vertex.zw;\n"
+                   "}";
+        }
+
+        virtual std::string FontSDFFrag() noexcept {
+            return std::string(GLSL_VERSION) +
+                    "in vec2 TexCoords;\n"
+                    "out vec4 fragColor;\n"
+                    "uniform sampler2D glyphTexture;\n"
+                    "uniform vec3 textColor;\n"
+                    "void main()\n"
+                    "{\n"
+                       "float glyphShape = texture(glyphTexture, TexCoords).r;\n"
+                       "if (glyphShape < 0.44)\n"
+                            "discard;\n"
+                       "vec3 outColor = textColor;"
+                       "if (glyphShape < 0.5) outColor = vec3(1, 0.9, 1);"
+                       "fragColor = vec4(outColor, 1.0);\n"
+                    "}";
+        }
+
+        virtual std::string BlinnPhongFn() noexcept {
             return "\nvec3 BlinnPhong(vec3 ambientColor, vec3 diffuseColor, \n"
                    "   vec3 specularColor, vec3 normal, vec3 viewDir, Light light) {\n"
                    "   vec3 lightDir = normalize(light.position - gl_FragCoord.xyz);\n"
@@ -48,7 +84,7 @@ namespace LL::Renderer {
                    "   return result;\n"
                    "}\n";
         }
-        virtual std::string CascadeShadows() noexcept {
+        virtual std::string CascadeShadowsFn() noexcept {
             return
                 // @position: position of the point for which the shadow needs to be calculated
                 // @lightDirection: direction of the light source
