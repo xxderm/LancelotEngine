@@ -6,51 +6,57 @@ namespace LL::Renderer {
         return instance;
     }
 
+    const auto specialGlyphs = {
+            '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=',
+            '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+',
+            '"', ';', '%',':', '?',
+    };
+
     bool TextGL::AddFont(std::string path) {
         glEnable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        FT_Library ft;
-        if (FT_Init_FreeType(&ft)) {
-            return false;
-        }
-        FT_Face face;
-        if (FT_New_Face(ft, path.c_str(), 0, &face)) {
-            return false;
-        }
-        FT_Set_Pixel_Sizes(face, 0, 32);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        msdfgen::FreetypeHandle *ftm = msdfgen::initializeFreetype();
+        if (ftm) {
+            msdfgen::FontHandle *font = loadFont(ftm, path.c_str());
+            if (font) {
+                msdfgen::Shape shape;
+                for (auto i = L'а'; i <= L'я'; i++) {
+                    if (msdfgen::loadGlyph(shape, font, i)) {
+                        shape.normalize();
+                        //                      max. angle
+                        msdfgen::edgeColoringSimple(shape, 3.0);
+                        //           image width, height
+                        msdfgen::Bitmap<float, 3> msdf(32, 32);
+                        auto bounds = shape.getBounds();
+                        //                     range, scale, translation
+                        generateMSDF(msdf, shape, 4.0, 1.0, msdfgen::Vector2(0.0, abs(bounds.b - 2)));
 
-        for (uint32_t i = 0; i < 255; i++) {
-            if (FT_Load_Char(face, i, FT_LOAD_RENDER)) {
-                // error message
-                continue;
+                        // Create texture
+                        auto glyphTexture = std::make_shared<TextureGL>();
+                        glyphTexture->Create(msdf.operator()(0, 0), msdf.width(), msdf.height());
+                        //
+
+                        //msdfgen::savePng(msdf, "TEST.png");
+                        //break;
+
+                        Glyph glyph = {
+                                glyphTexture,
+                                32 - bounds.t,
+                                bounds.r + bounds.l,
+                                bounds.t,
+                                bounds.b,
+                                bounds.l,
+                                32
+                        };
+                        mGlyps.insert(std::pair<uint32_t, Glyph>(i, glyph));
+                    }
+                }
+                destroyFont(font);
             }
-
-            FT_GlyphSlot slot = face->glyph;
-
-            auto ftRenderGlyphStatus = FT_Render_Glyph(slot, FT_RENDER_MODE_SDF);
-            int width = slot->bitmap.width;
-            int height = slot->bitmap.rows;
-            unsigned char* buffer = slot->bitmap.buffer;
-
-            // Create texture
-            auto glyphTexture = std::make_shared<TextureGL>();
-            glyphTexture->Create(buffer, width, height);
-            //
-            
-            Glyph glyph = {
-                glyphTexture,
-                glm::ivec2(slot->bitmap.width, slot->bitmap.rows),
-                glm::ivec2(slot->bitmap_left, slot->bitmap_top),
-                (uint32_t)slot->advance.x
-            };
-            mGlyps.insert(std::pair<uint32_t, Glyph>(i, glyph));
-
+            deinitializeFreetype(ftm);
         }
-        FT_Done_Face(face);
-        FT_Done_FreeType(ft);
 
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);

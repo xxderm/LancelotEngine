@@ -10,6 +10,7 @@ namespace LL::Window {
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
         SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
         SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
         if (!WindowSDL::Initialize(properties)) {
             LL_LOG(Core::LogLevel::ERR, "SDLWindowOpenGL SDL initialize error");
             return false;
@@ -47,7 +48,7 @@ namespace LL::Window {
 
     void SDLWindowOpenGL::Clear() {
         PrepareToUpdateControls();
-        glClearColor(0.f, 0.f, 0.f, 1.f);
+        glClearColor(1.f, 1.f, 1.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
