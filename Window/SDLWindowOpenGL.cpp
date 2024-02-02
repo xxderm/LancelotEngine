@@ -26,6 +26,9 @@ namespace LL::Window {
             return false;
         }
         SDL_GL_SetSwapInterval(properties.Vsync);
+        glEnable(GL_BLEND);
+        glEnable(GL_DEPTH_TEST);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();

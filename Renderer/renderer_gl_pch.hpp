@@ -7,4 +7,8 @@
 #include <glm/matrix.hpp>
 #include <glm/mat4x4.hpp>
 #include <freetype/freetype.h>
+#include "imgui.h"
+#include "imgui_impl_sdl2.h"
+#include "msdfgen.h"
+#include "msdfgen-ext.h"
 #include FT_FREETYPE_H
