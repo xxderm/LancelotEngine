@@ -5,9 +5,9 @@
 #include "ShaderOpenGL.hpp"
 
 namespace LL::Renderer {
+    // TODO: Make string renderer
+
     class LL_CALL TextGL;
-    template<typename T>
-    concept GlyphList = std::same_as<T, std::string> || std::same_as<T, std::wstring>;
 
     class LL_CALL FontGL final {
     public:
@@ -17,7 +17,6 @@ namespace LL::Renderer {
         friend class TextGL;
     public:
         void Initialize(const std::string& path);
-        //template<GlyphList T>
         void AddGlyphs(std::wstring glyphs);
     private:
         struct Glyph {
@@ -41,14 +40,13 @@ namespace LL::Renderer {
         TextGL() = default;
         static TextGL& GetInstance();
         void Initialize();
-        //template<GlyphList T>
         void AddFont(std::string fontKey, std::string path, std::wstring glyphs);
-        //template<GlyphList T>
         void Render(std::string fontKey, std::wstring text, float x, float y, int size, glm::vec3 color);
     private:
         unsigned int mGlyphBufferArrayId{};
         unsigned  int mGlyphBufferObjectId{};
         std::shared_ptr<Renderer::ShaderProgramGL> mGlyphShader{};
         std::map<std::string, std::shared_ptr<FontGL>> mFonts{};
+        bool mAlreadyInit = false;
     };
 }

@@ -3,13 +3,13 @@
 namespace LL::Renderer {
     TextGL &LL::Renderer::TextGL::GetInstance() {
         static TextGL instance;
-        instance.Initialize();
         return instance;
     }
 
     // TODO: placeholder, use Renderer/BuffersOpenGL
     void TextGL::Initialize() {
         LL_PROFILE
+        mAlreadyInit = true;
         glGenVertexArrays(1, &mGlyphBufferArrayId);
         glGenBuffers(1, &mGlyphBufferObjectId);
         glBindVertexArray(mGlyphBufferArrayId);
@@ -28,15 +28,14 @@ namespace LL::Renderer {
         mGlyphShader->Compile();
     }
 
-    //template<GlyphList T>
     void TextGL::AddFont(std::string fontKey, std::string path, std::wstring glyphs) {
         LL_PROFILE
+        if (!mAlreadyInit) this->Initialize();
         mFonts.insert({fontKey, std::make_shared<FontGL>()});
         mFonts.at(fontKey)->Initialize(path);
         mFonts.at(fontKey)->AddGlyphs(glyphs);
     }
 
-    //template<GlyphList T>
     void TextGL::Render(std::string fontKey, std::wstring text, float x, float y, int size, glm::vec3 color) {
         float pxRange = (static_cast<float>(size) / 32.f) * 3.85f;
 
@@ -109,7 +108,6 @@ namespace LL::Renderer {
             msdfgen::deinitializeFreetype(mFtHandle);
     }
 
-    //template<GlyphList T>
     void FontGL::AddGlyphs(const std::wstring glyphs) {
         LL_PROFILE
         msdfgen::Shape currentShape;

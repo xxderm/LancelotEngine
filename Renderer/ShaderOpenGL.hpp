@@ -37,7 +37,7 @@ namespace LL::Renderer {
         void Release();
         ~ShaderProgramGL();
     private:
-        void CompileErrors();
+        void CompileErrors(GLuint id, int32_t status);
     private:
         GLuint mId{};
         std::unordered_map<ShaderType, ShaderBody> mShaders{};

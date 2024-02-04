@@ -57,22 +57,14 @@ namespace LL::Renderer {
         glUseProgram(0);
     }
 
-    void ShaderProgramGL::CompileErrors() {
-        GLint success;
+    void ShaderProgramGL::CompileErrors(GLuint id, int32_t status) {
+        GLint success = 1;
         GLchar infoLog[1024];
 
-        glGetShaderiv(mId, GL_COMPILE_STATUS, &success);
-        if (!success)
-        {
-            glGetShaderInfoLog(mId, 1024, NULL, infoLog);
-            LL_LOG(LL::Core::ERR, "ERROR::SHADER_COMPILATION_ERROR of type: ", infoLog);
-        }
-
-        glGetProgramiv(mId, GL_LINK_STATUS, &success);
-        if (!success)
-        {
-            glGetProgramInfoLog(mId, 1024, NULL, infoLog);
-            LL_LOG(LL::Core::ERR, "ERROR::PROGRAM_LINKING_ERROR of type: ", infoLog);
+        glGetShaderiv(id, status, &success);
+        if (!success) {
+            glGetShaderInfoLog(id, 1024, NULL, infoLog);
+            LL_LOG(LL::Core::ERR, "ERROR::SHADER_COMPILATION_ERROR of type: ", infoLog, " status: ", status);
         }
     }
 
@@ -114,7 +106,7 @@ namespace LL::Renderer {
             }
             glShaderSource(body.Id, 1, &sCode, NULL);
             glCompileShader(body.Id);
-            this->CompileErrors();
+            this->CompileErrors(body.Id, GL_COMPILE_STATUS);
         }
 
         for (auto& shader : mShaders) {
@@ -123,7 +115,7 @@ namespace LL::Renderer {
         }
 
         glLinkProgram(this->mId);
-        this->CompileErrors();
+        this->CompileErrors(mId, GL_LINK_STATUS);
 
         for (auto& shader : mShaders) {
             auto& body = shader.second;
