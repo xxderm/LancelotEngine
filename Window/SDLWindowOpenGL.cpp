@@ -10,6 +10,7 @@ namespace LL::Window {
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
         SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
         SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
         if (!WindowSDL::Initialize(properties)) {
             LL_LOG(Core::LogLevel::ERR, "SDLWindowOpenGL SDL initialize error");
             return false;
@@ -25,20 +26,32 @@ namespace LL::Window {
             return false;
         }
         SDL_GL_SetSwapInterval(properties.Vsync);
+        glEnable(GL_BLEND);
+        glEnable(GL_DEPTH_TEST);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO();
+        (void)io;
+        ImGui_ImplSDL2_InitForOpenGL(mWindow, mContext);
+        ImGui_ImplOpenGL3_Init("#version 330");
         LL_LOG(Core::INFO, "SDLWindowOpenGL initialization success");
         return true;
     }
 
     void SDLWindowOpenGL::Swap() {
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplSDL2_NewFrame(mWindow);
+        ImGui::NewFrame();
         mStates->OnRender();
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         SDL_GL_SwapWindow(mWindow);
-        LL_LOG(LL::Core::LogLevel::ERR, "Убрать хуйню SDLWindowOpenGLm");
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 
     void SDLWindowOpenGL::Clear() {
         PrepareToUpdateControls();
-        glClearColor(0.f, 0.f, 0.f, 1.f);
+        glClearColor(1.f, 1.f, 1.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
@@ -60,6 +73,7 @@ namespace LL::Window {
 
     void SDLWindowOpenGL::PrepareToUpdateControls() {
         while (SDL_PollEvent(&mEvent) != 0) {
+            ImGui_ImplSDL2_ProcessEvent(&mEvent);
             if (mEvent.type == SDL_QUIT) {
             }
         }

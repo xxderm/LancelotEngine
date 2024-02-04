@@ -2,6 +2,8 @@
 #include "WindowSDL.hpp"
 #include <GL/glew.h>
 #include <GL/GL.h>
+#include "imgui_impl_sdl2.h"
+#include "imgui_impl_opengl3.h"
 
 namespace LL::Window {
     class LL_CALL SDLWindowOpenGL final : public WindowSDL {

@@ -7,7 +7,7 @@ namespace LL::Renderer {
 
     class LL_CALL TextureGL final : public Texture {
     public:
-        void Create(unsigned char* data, unsigned int width, unsigned int height) override;
+        void Create(void* data, unsigned int width, unsigned int height) override;
         void Destroy() override;
         ~TextureGL() override;
     };

@@ -1,6 +1,8 @@
 #pragma once
 #include "ShaderMetaDataOpenGL.hpp"
 #include "renderer_gl_pch.hpp"
+#include "../Core/Log.hpp"
+#include "../Core/SessionProfiler.hpp"
 
 namespace LL::Renderer {
     enum LL_CALL ShaderType : int {
@@ -35,7 +37,7 @@ namespace LL::Renderer {
         void Release();
         ~ShaderProgramGL();
     private:
-        void CompileErrors();
+        void CompileErrors(GLuint id, int32_t status);
     private:
         GLuint mId{};
         std::unordered_map<ShaderType, ShaderBody> mShaders{};
