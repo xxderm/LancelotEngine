@@ -2,7 +2,7 @@
 #include "SDLWindowDirectX.hpp"
 
 namespace LL::Window {
-    bool SDLWindowDirectX::Initialize(WindowProperties properties) {
+    bool SDLWindowDirectX::Initialize(std::shared_ptr<WindowProperties> properties) {
         mFlags = SDL_WINDOW_SHOWN;
         if (!WindowSDL::Initialize(properties)) {
             LL_LOG(Core::LogLevel::ERR, "SDLWindowDirectX SDL initialize error");
@@ -15,8 +15,8 @@ namespace LL::Window {
 
         DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
         swapChainDesc.BufferCount = 1;
-        swapChainDesc.BufferDesc.Width = properties.Width;
-        swapChainDesc.BufferDesc.Height = properties.Height;
+        swapChainDesc.BufferDesc.Width = properties->Width;
+        swapChainDesc.BufferDesc.Height = properties->Height;
         swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
         swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
         swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
@@ -34,8 +34,8 @@ namespace LL::Window {
         mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBufferTexture));
         mDevice->CreateRenderTargetView(backBufferTexture, nullptr, &mBackBuffer);
 
-        mViewport.Width = properties.Width;
-        mViewport.Height = properties.Height;
+        mViewport.Width = properties->Width;
+        mViewport.Height = properties->Height;
         mViewport.TopLeftX = 0;
         mViewport.TopLeftY = 0;
         mViewport.MinDepth = 0.0f;

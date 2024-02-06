@@ -12,7 +12,7 @@ namespace LL::Window {
 
     class LL_CALL IWindow {
     public:
-        virtual bool Initialize(WindowProperties) = 0;
+        virtual bool Initialize(std::shared_ptr<WindowProperties> properties) = 0;
         virtual void StartState(std::shared_ptr<Core::AppStateControl> startState) = 0;
         virtual void Clear() = 0;
         virtual void Swap() = 0;

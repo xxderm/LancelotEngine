@@ -2,7 +2,7 @@
 #include "SDLWindowOpenGL.hpp"
 
 namespace LL::Window {
-    bool SDLWindowOpenGL::Initialize(WindowProperties properties) {
+    bool SDLWindowOpenGL::Initialize(std::shared_ptr<WindowProperties> properties) {
         this->mFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
@@ -11,6 +11,7 @@ namespace LL::Window {
         SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
         SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+
         if (!WindowSDL::Initialize(properties)) {
             LL_LOG(Core::LogLevel::ERR, "SDLWindowOpenGL SDL initialize error");
             return false;
@@ -25,7 +26,7 @@ namespace LL::Window {
             LL_LOG(Core::ERR, "Failed to initialize glew", glewGetErrorString(glewInitResult));
             return false;
         }
-        SDL_GL_SetSwapInterval(properties.Vsync);
+        SDL_GL_SetSwapInterval(properties->Vsync);
         glEnable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -73,6 +74,7 @@ namespace LL::Window {
 
     void SDLWindowOpenGL::PrepareToUpdateControls() {
         while (SDL_PollEvent(&mEvent) != 0) {
+            this->HandleFocus(mEvent);
             ImGui_ImplSDL2_ProcessEvent(&mEvent);
             if (mEvent.type == SDL_QUIT) {
             }

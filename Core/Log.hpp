@@ -13,7 +13,7 @@ namespace LL::Core {
 
     class LL_CALL Log final {
     public:
-        ~Log() = default;
+        ~Log() { CloseLogFile(); }
         Log() = default;
         static Log& GetInstance();
         template<typename... Args>
