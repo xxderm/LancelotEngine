@@ -11,7 +11,7 @@ namespace LL::Window {
         SDLWindowOpenGL() = default;
         ~SDLWindowOpenGL();
         void Destroy();
-        bool Initialize(WindowProperties properties) override;
+        bool Initialize(std::shared_ptr<WindowProperties> properties) override;
         void Clear() override;
         void Swap() override;
     protected:
